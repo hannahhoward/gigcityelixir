@@ -1,0 +1,612 @@
+Outline
+
+Stateful Web Applications
+
+- slide - 
+Who Am I
+- notes - I've been writing web apps for a bit...
+
+- slide -
+Obligatory Personal Anecdote
+- image - pooh bear picture
+I like dogs
+
+- slide -
+This is a talk about Elixir and Phoenix
+
+- slide - 
+For languages switchers and mid level folks
+- notes - It's aimed at people coming from Ruby, Python, PHP or other popular programming languages
+
+- slide -
+Goal: give you a new perspective
+
+- slide -
+Existing perspective:
+"I want to use Elixir and Phoenix cause it's just like Ruby and Rails but faster"
+- notes -
+I hear this line a lot cause it's particularly motivating people who are switch from Ruby. 
+But it could easily be applied to Python & Jango, or PHP and whatever folks are using these days
+Maybe you throw in a desire to do a more functional programming.
+Maybe a bit about concurrency.
+
+- slide -
+That's fine. 
+
+- slide -
+It is "faster"
+- notes -
+Caveat: but not exactly the fastest
+
+- slide -
+But let's rewind... what is "faster"?
+- notes -
+What does "faster" mean for a web application?
+Is it just fast processing? Aside from syntax, shouldn't we just write web applications in C?
+
+- slide -
+Web Applications -- in particular servers -- have a different definition of "fast"
+- notes -
+Web applications have to lots of people at once! We call the ability to manage doing many things at once concurrency
+
+- slide -
+But let's rewind further...
+What is a web application?
+
+- slide -
+Many users = many computers
+- notes -
+To serve many people at once, a web application is spread across many computers over a network
+At it's most basic level, as server is one computer that sends HTML, and the user views it on a different computer called a browser
+
+- slide -
+Distributed System = program that runs across many computers connected by a network
+
+- slide -
+Distributed Systems Are Hard To Build
+
+- slide -
+Distributed System Problem #1: Scalability
+- note - 
+
+- slide -
+Theory: Machines = Users Served * Some Constant Ratio
+
+- slide -
+Reality w/o lots of work:
+Machines = Exponential or geometric growth based on users, or it just doesn't work
+
+- slide -
+Distributed System Problem #2:
+Managing State
+
+- slide -
+But let's rewind even further...
+What is state?
+
+- slide -
+
+"All that you touch
+You Change.
+
+All that you Change
+Changes you.
+
+The only lasting truth
+is Change.
+
+God
+is Change."
+
+- Octavia Butler (or Earthseed: The Books Of The Living if you wanna get technical about it...)
+
+- slide -
+- picture zoolander -
+WTF talk did I just come too?
+
+- slide -
+A application is stateful if the way you interact with it changes over time as your interactions influence the internal condition of the application
+
+- slide -
+State = the internal condition of an application
+
+- slide -
+States been getting a bad name these days...
+- meme - mean girls
+- notes - 
+Everyone loves the idea of stateless everything
+Stateless components
+Stateless authentication
+No mutable state
+
+- slide -
+State is why web programmers have jobs
+
+- slide -
+A truly stateless web application
+- link - http://info.cern.ch/hypertext/WWW/TheProject.html
+- image - first web page ever
+
+- slide -
+What we mean: Managing state is hard
+
+- slide -
+Even more so: Managing state is really hard in a distributed system
+
+- slide -
+Managing state in a distributed sytem:
+- image - Married with children
+Why many marriages fail
+- notes - when state is stored in many places, it's really hard to keep in sync
+
+- slide -
+And that's what the rest of this talk is about...
+How we build distributed systems that are concurrent, scale well and manage state well
+
+- slide -
+Managing State In A Distributed System Model 1: 
+What we've always done
+
+- slide -
+You had a system, you just didn't know it
+- note - if you've done traditional web server programming (Ruby on Rails, Django, most PHP apps), you've been using an elaborate and well thought out method for building a distributed system
+
+- slide -
+Constraint #1: 
+HTTP as a "stateless" protocol
+(solves the problem of serving content)
+
+- slide -
+Constraint #2:
+Your server code is stateless
+
+- slide -
+Primary State Manager: 
+The database
+
+- slide -
+Secondary State Manager:
+Session/cookies (ideally just who's logged in)
+
+- slide -
+Concurrency Solution #1: Delegate to the operating system
+- notes - 
+Operating systems can run multiple programs at once, they call them processes -- they're really good at it
+Unfortunately, you don't have a lot of control with that. 
+Moreover, when you programatically want do things in parallel you have to use threads. Threads pretty much such to manage, cause shared memory = locks
+Ruby is particularly not helpful in this department
+But no worries... at least you cah lots of processing handling web requests seperately
+
+- slide -
+Concurrency Solution #2: Delegate to background jobs
+- notes -
+When you gotta do something other than a background job, you make a new process or thread to handle it... in Ruby we use the stuff like Sidekiq
+
+- slide -
+Why it works:
+You can scale your server at least
+
+- slide -
+Scalability bottle neck: the database
+
+- slide -
+Scalability bottle neck: almost no state management delegated to the client
+
+- slide -
+Reasons for this model: Traditional programming languages?
+
+- slide -
+Managing State In A Distributed System Model 2:
+The Erlang VM & OTP
+
+- slide -
+Meanwhile, back in the 80's...
+- picture - 80's top gun
+
+- slide -
+Ericsson and the telephone switch problem
+
+- slide -
+Erlang Concurrency Part 1 : Actor Pattern
+
+- slide -
+Like the Object in OOP, an Actor is the fundamental building block of an application
+
+- slide -
+Like an object, an actor can receive messages, and act on them
+
+- slide -
+Key Difference #1:
+In OOP objects are some isolated by the compiler through private members
+Actors are 100% isolated from each other.
+
+- slide -
+Key Difference #2:
+In OOP, message passing is sychronous -- you probably don't even call it message passing
+In the actor pattern, message passing is asychronous, but messages arrive in the order they're sent
+
+- slide -
+- image - Willie Ninja
+Serving OOP Realness
+- notes - In some ways, the Actor Model is closer to the original model of theories of Object Oriented Program put forward by Alan Kay
+
+- slide -
+Erlang Concurrency Solution #2: A VM that replicates preemptive scheduling from an Operating System
+
+- slide -
+In Erlang, actors = processes
+
+- slide -
+Digression: preemptive vs coorporative scheduling
+
+- slide - 
+Why not delegate to the OS?
+OS processes = slow to create, lots of memory
+- notes - by integrating directly into the programming language, Erlang is able to massively lower time to create processes and the memory they consume
+
+- slide -
+
+- gif - dennis hopper
+What programming language essentially implements a cooperative scheduling model inside the language?
+Notes: Javascript - event loop, examples
+
+- slide -
+- image - Windows 3.1
+Preemptive Scheduling Bonus # 2:
+Fault tolerance
+
+- slide -
+State Management In Erlang: The OTP
+
+- slide -
+Erlang is functional, which makes state immutable
+State is tracked threw processes
+
+- slide -
+But it needs a bit more work...
+
+- slide -
+OTP = a standard library on steroids that makes handling distributed state way easier!
+
+- slide -
+- image - carnegie hall
+OTP is based on distributed system abstractions developed over 20 years of experience
+
+- slide -
+"Well supply the abstractions, you supply the implementation!" - future Erlang/OTP marketing campaign
+
+- slide -
+What are the abstractions?
+
+- slide - 
+Behaviors - abstractions for writing processes that handle state
+
+- slide -
+Most common behavior: GenServer
+
+- slide -
+GenServer is process that maintains a permaneant state over time
+
+- slide -
+Two ways to talk to a Genserver
+- send it a message expecting a reply (synchronous) - "CALL"
+- send a mesage not expecting a reply (asynchronous) - "CAST"
+
+- slide -
+A GenServer itself implements two functions:
+
+handle_call - function that receives a message, and based on message returns a status (ok or error), reply to caller, and new version of state for GenServer
+handle_cast - function that receives a message, and returns a new version of state for the GenServer
+
+- slide -
+A GenServer in elixir:
+
+- code -
+defmodule KV.Registry do
+  use GenServer
+
+  ## Client API
+
+  @doc """
+  Starts the registry.
+  """
+  def start_link do
+    GenServer.start_link(__MODULE__, :ok, [])
+  end
+
+  @doc """
+  Looks up the bucket pid for `name` stored in `server`.
+
+  Returns `{:ok, pid}` if the bucket exists, `:error` otherwise.
+  """
+  def lookup(server, name) do
+    GenServer.call(server, {:lookup, name})
+  end
+
+  @doc """
+  Ensures there is a bucket associated to the given `name` in `server`.
+  """
+  def create(server, name) do
+    GenServer.cast(server, {:create, name})
+  end
+
+  ## Server Callbacks
+
+  def init(:ok) do
+    {:ok, %{}}
+  end
+
+  def handle_call({:lookup, name}, _from, names) do
+    {:reply, Map.fetch(names, name), names}
+  end
+
+  def handle_cast({:create, name}, names) do
+    if Map.has_key?(names, name) do
+      {:noreply, names}
+    else
+      {:ok, bucket} = KV.Bucket.start_link
+      {:noreply, Map.put(names, name, bucket)}
+    end
+  end
+end
+
+- slide -
+Elixir offers two even simpler versions GenServers
+- Task - I just wanna do some background processing
+- Agent - I just wanna hold state over time
+
+- slide -
+OTP has other basic behaviors...
+- list -
+gen_fsm
+
+For implementing finite-state machines (Old)
+
+gen_statem
+
+For implementing state machines (New)
+
+gen_event
+
+For implementing event handling functionality
+
+- slide -
+....One more thing...
+
+- slide -
+Supervisor = special behavior to manage other behaviors
+
+- slide -
+Supervisors have:
+A list of child behaviors (i.e. GenServers, etc)
+Strategies for how to keep the children running (i.e. handling failure)
+
+- slide -
+Supervisors can have children that are themselves supervisors for other behaviors
+
+- slide -
+Supervision Tree
+- image supervision tree -
+- square = supervisors
+- circle = workers (behaviors that are not supervisors)
+- notes: We call the hierarchy tree of supervisors with children the supervision tree
+All children behaviors that aren't supervisors we call workers
+
+- slide -
+Supervisor example
+-- code --
+defmodule KV.Supervisor do
+  use Supervisor
+
+  def start_link do
+    Supervisor.start_link(__MODULE__, :ok)
+  end
+
+  def init(:ok) do
+    children = [
+      worker(KV.Registry, [KV.Registry])
+    ]
+
+    supervise(children, strategy: :one_for_one)
+  end
+end
+
+- slide -
+And that's the basics of OTP
+But that's not all...
+
+- slide -
+Other stuff in OTP...
+Real-time distributed databases
+Static code analyis (Dializer)
+Tools to communicate between servers
+Tools to deploy new code without across multiple computers without taking the system down
+GUI tools to monitor all this
+
+OMG OMG OMG!
+
+- slide -
+And now back to our original question... why use Elixir and Phoenix?
+
+- slide -
+- image - not your fathers oldsmobile
+"It's not your fathers Erlang" - future Elixir marketing campaign
+
+- slide -
+What about Phoenix?
+
+- slide -
+Phoenix: 
+An Elixir Web framework That Implements Standard Patterns Of Distributed Web Applications
+
+- slide -
+- image: jason borne -
+"A new language, but still familiar" - future Phoenix marketing slogan
+
+- slide -
+But here's where it gets complicated...
+- image - complicated
+
+- slide -
+- image - Carrie
+You have another toolset as well with immense powers... 
+Be afraid, very afraid
+
+- slide -
+Cause what's better than one monster truck?
+- image - Two monster trucks
+
+- slide -
+And this is where we enter uncharted territory...
+
+- slide -
+The Big Question:
+How do you mix a standard web distributed system with the Erlang VM / OTP distributed system?
+
+- slide -
+Answer 1:
+You're doing it already
+Notes: New Phoenix features like Channels and Presence are built on top of OTP
+
+- slide -
+Answer 2:
+To do the stuff you normally do, only easier
+
+- slide -
+An Elixir Package You Should Never See:
+- image - E - Sidekiq 
+
+- slide -
+Answer 3:
+I have no freakin clue... but I have some ideas
+
+- slide -
+Possible Rule 1:
+If it's something real-time, don't use the database
+
+- slide -
+Example: Werewolf
+
+- slide -
+Werewolf - Game model (should be game room)
+--
+defmodule Werewolf.Game do
+  use Werewolf.Web, :model
+
+  schema "games" do
+    field :slug, :string
+
+    timestamps
+  end
+
+  @required_fields ~w(slug)
+  @optional_fields ~w()
+
+  @doc """
+  Creates a changeset based on the `model` and `params`.
+
+  If no params are provided, an invalid changeset is returned
+  with no validation performed.
+  """
+  def changeset(model, params \\ %{}) do
+    model
+    |> cast(params, @required_fields, @optional_fields)
+  end
+end
+
+- slide -
+Werewolf - Gameplay Genserver 
+
+---
+defmodule Werewolf.Gameplay do
+  use GenServer
+
+  defstruct [
+    id: nil,
+    game_started: false,
+    players: []
+  ]
+
+  # CLIENT
+  def start_link(game_id) do
+    GenServer.start_link(__MODULE__, game_id, name: ref(game_id))
+  end
+
+  def join(game_id, player_id, pid) do
+    try_call(game_id, {:join, player_id, pid})
+  end
+
+  def start_game(game_id, pid) do
+    try_call(game_id, {:start_game, pid})
+  end
+
+  # SERVER
+  def init(id) do
+    {:ok, %__MODULE__{id: id}}
+  end
+
+  def handle_call({:join, player_id, pid}, _from, game) do
+    updated_players = Enum.dedup(game.players ++ [player_id])
+    game = %{game | players: updated_players}
+    |> IO.inspect
+    {:reply, {:ok, self}, game}
+  end
+
+  def handle_call({:start_game, pid}, _from, game) do
+    new_game = %{game | game_started: true}
+    |> IO.inspect
+    {:reply, {:ok, self}, new_game}
+  end
+
+  defp ref(game_id), do: {:global, {:gameplay, game_id}}
+
+  defp try_call(game_id, message) do
+    case GenServer.whereis(ref(game_id)) do
+      nil ->
+        {:error, "Game does not exist"}
+      pid ->
+        GenServer.call(pid, message)
+    end
+  end
+end
+
+- slide -
+Possible Rule #2:
+If it's stored distributed and has to scalre, don't use a relational database, use OTP (or Riak!)
+... and don't bolt on MongoDB ...
+
+- slide -
+Possible Rule #3:
+If you can't do it with web tools, obviously use OTP
+- note - almost not existing web languages and frameworks support hot reloading, OTP does
+
+- slide -
+Cardinal Rule #1:
+If you only know traditional web models...
+...or only OTP...
+...learn the other!
+
+- slide -
+Cardinal Rule #2:
+Once you know both...
+...Be creative...
+...Discover new rules!
+
+- slide -
+Origin of this talk:
+- Mohammed Ali -
+A bit of overconfidence
+Notes: I came up with the idea for this talk cause I thought I could answer this question -- who to mix OTP + Phoenix
+As I wrote the talk, I realized I didn't even fully understand the problem
+
+- slide -
+This question is huge... 
+
+We're all gonna figure it out together!
+
+- slide -
+Good luck
+- image - Han Solo
+
+- slide -
+talk URL
