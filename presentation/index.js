@@ -19,8 +19,7 @@ import {
   Markdown,
   Quote,
   Slide,
-  Spectacle,
-  Text,
+  Text
 } from "spectacle";
 
 // Import image preloader util
@@ -28,6 +27,8 @@ import preloader from "spectacle/lib/utils/preloader";
 
 // Import theme
 import createTheme from "spectacle/lib/themes/default";
+import BlankSlide from "./slideTemplates/blank-slide.jsx";
+import AboutMeSlide from "./slideTemplates/about-me-slide.jsx";
 
 // Require CSS
 require("normalize.css");
@@ -38,8 +39,10 @@ const images = {
   carnegieHall: require("../assets/carnegie-hall.jpg"),
   carrie: require("../assets/carrie.jpg"),
   complicated: require("../assets/complicated.png"),
+  conflict: require("../assets/conflict.gif"),
   firstWebsite: require("../assets/first-website.png"),
   hansolo: require("../assets/hansolo.gif"),
+  graham: require("../assets/graham.gif"),
   marriedWithChildren: require("../assets/married-with-children.png"),
   mattdamon: require("../assets/mattdamon.jpg"),
   meangirls: require("../assets/meangirls.gif"),
@@ -52,11 +55,17 @@ const images = {
   starTrek: require("../assets/star-trek.png"),
   suptree: require("../assets/suptree.png"),
   techgirlwonder: require("../assets/techgirlwonder-01.png"),
+  cheerleader: require("../assets/cheerleader.gif"),
+  theymeet: require("../assets/theymeet.gif"),
   topgun: require("../assets/topgun.gif"),
   vogueing: require("../assets/vogueing.jpg"),
   win31: require("../assets/win31.png"),
   zoolander: require("../assets/zoolander.gif"),
   katniss: require("../assets/katniss.gif"),
+  megancheer: require("../assets/Megan_cheer.gif"),
+  kiss: require("../assets/kiss.gif"),
+  intro: require("../assets/intro.jpg"),
+  inception: require("../assets/inception.jpg")
 };
 
 preloader(images);
@@ -64,7 +73,7 @@ preloader(images);
 const theme = createTheme({
   primary: "#D46A6A",
   secondary: "#260339",
-  tertiary: "#7585A9",
+  tertiary: "#7585A9"
 });
 
 const darkTertiary = "#2C3F70";
@@ -72,7 +81,7 @@ const darkTertiary = "#2C3F70";
 const _alignCenter = {
   alignItems: "center",
   height: "550px",
-  marginTop: "40px",
+  marginTop: "40px"
 };
 
 const notes = {
@@ -98,7 +107,8 @@ const notes = {
     Is it just fast processing? Aside from syntax, shouldn't we just write web applications in C?
   `,
   definitionFast: `
-    Web applications have to lots of people at once! We call the ability to manage doing many things at once concurrency
+    Most applications have to be "fast" in some sense, but fast in a web application means something specific. Namely,  
+    web applications have to serve lots of people at once! We call the ability to manage doing many things at once concurrency
   `,
   definitionWebApp: `
     To serve many people at once, a web application is spread across many computers over a network
@@ -150,7 +160,12 @@ const notes = {
   stateNeedsMoreWork: `
     You could technically stop there. But we learn some more things...
   `,
-  default: "",
+  vs: `
+    For the first part of this talk, I want to look at the properties
+    of web applications that make them unique, or perhaps different from say 
+    a command line application
+  `,
+  default: ""
 };
 
 const genServerClient = `
@@ -181,7 +196,7 @@ defmodule KV.Registry.Client do
   def create(server, name) do
     GenServer.cast(server, {:create, name})
   end
-end`
+end`;
 
 const genServerServer = `
 defmodule KV.Registry.Server do
@@ -279,7 +294,7 @@ defmodule Werewolf.Gameplay.Client do
         GenServer.call(pid, message)
     end
   end
-end`
+end`;
 
 const werewolfGameServer = `
 defmodule Werewolf.Gameplay.Server do
@@ -314,896 +329,985 @@ end
 export default class Presentation extends React.Component {
   render() {
     return (
-      <Spectacle theme={theme}>
-        <Deck transition={["zoom", "slide"]} transitionDuration={500}>
-          <Slide transition={["zoom"]} bgColor="primary">
-            <Heading size={1} caps lineHeight={1} textColor="secondary">
-              Stateful
+      <Deck
+        transition={["zoom", "slide"]}
+        transitionDuration={500}
+        theme={theme}
+      >
+        <BlankSlide transition={["zoom", "fade"]} notes="">
+          <Layout>
+            <Fit>
+              <Appear>
+                <Image
+                  src={images.techgirlwonder.replace("/", "")}
+                  height="700px"
+                  margin="0px 40px 0px 0px"
+                />
+              </Appear>
+            </Fit>
+            <Fill>
+              <Heading
+                size={1}
+                fit
+                caps
+                lineHeight={1}
+                textColor={darkTertiary}
+              >
+                @techgirlwonder #AboutMe
+              </Heading>
+              <List>
+                <Appear>
+                  <ListItem>Hannah Howard</ListItem>
+                </Appear>
+                <Appear>
+                  <ListItem>Programmer / Not of note</ListItem>
+                </Appear>
+                <Appear>
+                  <ListItem>hannah@carbonfive.com</ListItem>
+                </Appear>
+                <Appear>
+                  <ListItem>Twitter above!</ListItem>
+                </Appear>
+              </List>
+            </Fill>
+          </Layout>
+        </BlankSlide>
+        <BlankSlide>
+          <Heading size={1} fit caps lineHeight={1} textColor="secondary">
+            Obligatory Personal Anecdote
+          </Heading>
+          <Image src={images.poohbear.replace("/", "")} height="400px" />
+          <Text textSize="3.82rem">I like dogs</Text>
+        </BlankSlide>
+        <BlankSlide>
+          <Heading size={1} fit lineHeight={1} textColor="secondary">
+            #WontBeErased
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["zoom"]}>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            OTP And The Web
+          </Heading>
+          <Appear>
+            <Heading size={1} caps textColor={darkTertiary}>
+              A Love Story?
             </Heading>
-            <Appear>
-              <Heading size={1} caps textColor={darkTertiary}>
+          </Appear>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Prologue
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            Web Applications vs Everything Else
+          </Heading>
+          <Image
+            src={images.intro.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.definitionFast}
+        >
+          <Heading size={1} fit={false} caps textColor="primary">
+            Web Applications have a different definition of "fast"
+          </Heading>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.definitionWebApp}
+        >
+          <Heading size={1} fit={false} caps textColor="primary">
+            Many users need many computers
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Distributed System:
+          </Heading>
+          <Text textSize="3.82rem" textColor="tertiary">
+            A program that runs across many computers connected by a network
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Distributed System Problem #1:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Scalability
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            {" "}
+            Theory:
+          </Text>
+
+          <Heading size={1} caps textColor="primary">
+            Machines = Users Served * Some Constant Ratio
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Reality:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Machines = Exponential or geometric growth based on users
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Distributed System Problem #2:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Managing State
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            A application is stateful if the way you interact with it changes
+            over time as your interactions influence the internal condition of
+            the application
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            State:
+          </Heading>
+          <Text textSize="3.82rem" textColor="tertiary">
+            The internal condition of an application
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Even more so:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Managing state is really hard in a distributed system
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Managing state in a distributed sytem:
+          </Heading>
+          <Image
+            src={images.marriedWithChildren.replace("/", "")}
+            width="500px"
+            margin="40px auto 0px"
+          />
+          <Text textSize="3.82rem" textColor="tertiary">
+            Why many marriages fail
+          </Text>
+        </BlankSlide>
+
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Act 1:
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            The Web
+          </Heading>
+          <Image
+            src={images.cheerleader.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>
+              Just A Small Town Girl Living in Lonely World...
+            </Quote>
+          </BlockQuote>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            What is the Web Stack
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Constraint #1:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            HTTP as a "stateless" protocol
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Constraint #2:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Your server code is stateless
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Primary State Manager:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            The database
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Other Ways To Manage State
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">Session / Cookies</ListItem>
+            <ListItem textSize="3.82rem">Key Value Stores</ListItem>
+            <ListItem textSize="3.82rem">Caches</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes={notes.concurrencyOs}>
+          <Text textSize="3.82rem" textColor="tertiary">
+            Concurrency Solution #1:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Delegate to the operating system
+          </Heading>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.concurrencyBackground}
+        >
+          <Text textSize="3.82rem" textColor="tertiary">
+            Concurrency Solution #2:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Delegate to background jobs
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Why it works:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            You can scale your server at least
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Scalability bottle neck:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            The database
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Scalability bottle neck 2:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Realtime
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Properties Of The Web Stack
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              State Delegated And Saved To Disk
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Web Services Are Componentized And Disposable
+            </ListItem>
+            <ListItem textSize="3.82rem">Centralized + Star Topology</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Act 2:
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            The OTP
+          </Heading>
+          <Image
+            src={images.graham.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>
+              Just a city boi born and raised in South Detroit...
+            </Quote>
+          </BlockQuote>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Meanwhile...
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            back in the 80's...
+          </Heading>
+          <Image
+            src={images.topgun.replace("/", "")}
+            width="500px"
+            margin="40px auto 0px"
+          />
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Ericsson and the telephone switch problem
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Erlang Concurrency Part 1:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            Actor Pattern
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            An application is composed of several actors
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Actors are seperate from each other, can communicate through
+            messages
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Message passing is asychronous, but messages arrive in the order
+            they're sent
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Actor Pattern
+          </Heading>
+          <Image
+            src={images.vogueing.replace("/", "")}
+            width="500px"
+            margin="40px auto 0px"
+          />
+          <Text textSize="3.82rem" textColor="tertiary">
+            Serving OOP Realness since 1973
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Erlang Concurrency Solution #2:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            A VM that replicates preemptive scheduling from an Operating System
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            In Erlang, actors = processes
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Preemptive Scheduling Bonus # 2:
+          </Heading>
+          <Image
+            src={images.win31.replace("/", "")}
+            width="500px"
+            margin="40px auto 0px"
+          />
+          <Text textSize="3.82rem" textColor="tertiary">
+            Fault tolerance
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            State Management In Erlang:
+          </Text>
+          <Heading size={1} fit caps textColor="primary">
+            The OTP
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Erlang is functional, which makes state immutable
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Processes have internal state
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Behaviors:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Abstractions for writing processes that handle state
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Most common behavior:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            GenServer is process that maintains a permaneant state over time
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Two ways to talk to a Genserver
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              Send it a message expecting a reply (synchronous) - "CALL"
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Send a mesage not expecting a reply (asynchronous) - "CAST"
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Two Functions To Implement A GenServer
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={4} textColor="primary">
+            handle_call
+          </Heading>
+          <Layout>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
+                Parameters:
+              </Text>
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">Message</ListItem>
+                <ListItem textSize="3.82rem">Id of sender process</ListItem>
+                <ListItem textSize="3.82rem">
+                  Current State of GenServer
+                </ListItem>
+              </List>
+            </Fill>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
+                Returns:
+              </Text>
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">Type Of Reply</ListItem>
+                <ListItem textSize="3.82rem">Reply Data</ListItem>
+                <ListItem textSize="3.82rem">New State of GenServer</ListItem>
+              </List>
+            </Fill>
+          </Layout>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={4} textColor="primary">
+            handle_cast
+          </Heading>
+          <Layout>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
+                Parameters:
+              </Text>
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">Message</ListItem>
+                <ListItem textSize="3.82rem">Id of sender process</ListItem>
+                <ListItem textSize="3.82rem">
+                  Current State of GenServer
+                </ListItem>
+              </List>
+            </Fill>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
+                Returns:
+              </Text>
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">New State of GenServer</ListItem>
+              </List>
+            </Fill>
+          </Layout>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Two Simpler GenServers In Elixir
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              Task - I just wanna do some background processing
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Agent - I just wanna hold state over time
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Supervisor:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Special behavior to manage other behaviors
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Supervisors have:
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              A list of child behaviors (i.e. GenServers, etc)
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Strategies for how to keep the children running (i.e. handling
+              failure)
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Supervisors can have children that are themselves supervisors for
+            other behaviors
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Supervision Tree
+          </Heading>
+          <Image
+            src={images.suptree.replace("/", "")}
+            width="500px"
+            margin="40px auto 0px"
+          />
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Erlang Cluster:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Transparent communication between Erlang nodes
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Erlang Releases:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Release new code without taking the system down
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Other OTP Tools
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">ETS - caching</ListItem>
+            <ListItem textSize="3.82rem">
+              Mnesia - Distributed databases
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Properties Of The Erlang Stack
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              State Managed Directly And Kept In Memory
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Integrated System That Emphasizes Long Term Uptime
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              No single point of failure, division of responsibility
+            </ListItem>
+            <ListItem textSize="3.82rem">Soft Real-Time</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Act 3:
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            Elixir + Phoenix = OTP + Web
+          </Heading>
+          <Image
+            src={images.theymeet.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>
+              They took the midnight train going anywhere...
+            </Quote>
+          </BlockQuote>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Elixir Contains the Entire OTP, But Made Easier
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Phoenix:
+          </Heading>
+          <Text textSize="3.82rem" textColor="tertiary">
+            An Elixir Web framework That Implements Standard Patterns Of
+            Distributed Web Applications
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Web Stack + OTP
+          </Heading>
+          <Text textSize="3.82rem" textColor="tertiary">
+            Two Great Tastes, Now Together For The First Time
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            What's better than one monster truck?
+          </Heading>
+          <Image
+            src={images.monstertrucks.replace("/", "")}
+            width="600px"
+            margin="40px auto 0px"
+          />
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Complementary Aspects Of OTP And The Web Stack
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              Web Is Simple, Reliable, Not Super Fast Deals With Long Term State
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              OTP Is More Complicated But Fast, Deals Well With Real Time, More
+              Easily Scalable
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Act 4:
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            Challenges
+          </Heading>
+          <Image
+            src={images.conflict.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>
+              Shadows searching in the night...
+            </Quote>
+          </BlockQuote>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Is it that simple?
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={4} textColor="primary">
+            Contradictory Environments
+          </Heading>
+          <Layout>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
                 Web
-              </Heading>
-            </Appear>
-            <Appear>
-              <Heading size={1} caps textColor="secondary">
-                Applications
-              </Heading>
-            </Appear>
-          </Slide>
-          <Slide transition={["zoom", "fade"]} bgColor="primary" notes="">
-            <Layout>
-              <Fit>
-                <Appear>
-                  <Image src={images.techgirlwonder.replace("/", "")} height="700px" margin="0px 40px 0px 0px" />
-                </Appear>
-              </Fit>
-              <Fill>
-                <Heading size={1} fit caps lineHeight={1} textColor={darkTertiary}>
-                  @techgirlwonder #AboutMe
-                </Heading>
-                <List>
-                  <Appear><ListItem>Hannah Howard</ListItem></Appear>
-                  <Appear><ListItem>Programmer/Not of note</ListItem></Appear>
-                  <Appear><ListItem>hannah@techgirlwonder.com</ListItem></Appear>
-                  <Appear><ListItem>Twitter above!</ListItem></Appear>
-                </List>
-              </Fill>
-            </Layout>
-          </Slide>
-          <Slide>
-            <Heading size={1} fit caps lineHeight={1} textColor="secondary">
-              Obligatory Personal Anecdote
-            </Heading>
-            <Image src={images.poohbear.replace("/", "")} height="400px" />
-            <Text>
-              I like dogs
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="primary" notes="">
-            <Heading size={1} fit caps textColor="secondary">
-              This is a talk about Elixir and Phoenix
-            </Heading>
-            <Heading size={1} fit caps textColor={darkTertiary}>
-              for languages switchers and mid level folks
-            </Heading>
-            <Appear>
-              <Heading size={1} fit caps textColor="secondary">
-                Goal: give you a new perspective
-              </Heading>
-            </Appear>
-          </Slide>
-          <Slide>
-            <Heading size={1} fit caps lineHeight={1} textColor="secondary">
-              Note To The Erlang Gods
-            </Heading>
-            <Image src={images.katniss.replace("/", "")} height="300px" margin="40px auto 0px"/>
-          </Slide>          
-          <Slide transition={["slide"]} bgColor="black" notes={notes.existingPerspective}>
-            <BlockQuote>
-              <Quote>"I want to use Elixir and Phoenix cause it's just like Ruby and Rails but faster"</Quote>
-              <Cite>- well known perspective for switching</Cite>
-            </BlockQuote>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              That's fine.
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.itisfaster}>
-            <Heading size={1} fit caps textColor="primary">
-              It is "faster"
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.rewindFaster}>
-            <Heading size={3} fit caps textColor="primary">
-              But let's rewind...
-              
-            </Heading>
-            <Appear>
-              <Heading size={1} fit caps textColor="primary">
-                What is "faster"?
-              </Heading>
-            </Appear>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.definitionFast}>
-            <Heading size={1} fit caps textColor="primary">
-              Web Applications have a different definition of "fast"
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={3} fit caps textColor="primary">
-              But let's rewind further...
-            </Heading>
-            <Appear>
-              <Heading size={1} fit caps textColor="primary">
-                What is a web application?
-              </Heading>
-            </Appear>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.definitionWebApp}>
-            <Heading size={1} fit caps textColor="primary">
-              Many users need many computers
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Distributed System:
-            </Heading>
-            <Text textColor="tertiary">
-              Program that runs across many computers connected by a network
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Distributed Systems Are Hard
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Distributed System Problem #1:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Scalability
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Theory: Machines = Users Served * Some Constant Ratio
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Reality w/o lots of work:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              Machines = Exponential or geometric growth based on users
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Distributed System Problem #2:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Managing State
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={3} fit caps textColor="primary">
-              But let's rewind even further...
-            </Heading>
-            <Appear>
-              <Heading size={1} fit caps textColor="primary">
-                What is state?
-              </Heading>
-            </Appear>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <BlockQuote>
-              <Quote>
-                "All that you touch You Change.
-                <br />
-                All that you Change Changes you.
-                <br />
-                The only lasting truthis Change.
-                <br />
-                God is Change."
-              </Quote>
-              <Cite>- Octavia Butler, Parable Of The Sower</Cite>
-            </BlockQuote>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black">
-            <Heading size={1} fit caps textColor="primary">
-              WTF talk did I just come too?
-            </Heading>
-            <Image src={images.zoolander.replace("/", "")} width="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              A application is stateful if the way you interact with it changes over time as your interactions influence the internal condition of the application
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} caps textColor="primary">
-              State:
-            </Heading>
-            <Text textColor="tertiary">
-              The internal condition of an application
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.stateNotCool}>
-            <Heading size={1} fit caps textColor="primary">
-              States been getting a bad name these days...
-            </Heading>
-            <Image src={images.meangirls.replace("/", "")} height="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              State is why web programmers have jobs
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              A truly stateless web application
-            </Heading>
-            <Text textColor="tertiary">
-              http://info.cern.ch/hypertext/WWW/TheProject.html
-            </Text>
-            <Image src={images.firstWebsite.replace("/", "")} width="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              What we mean:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Managing state is hard
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Even more so:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              Managing state is really hard in a distributed system
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Managing state in a distributed sytem:
-            </Heading>
-            <Image src={images.marriedWithChildren.replace("/", "")} width="500px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              Why many marriages fail
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              And that's what the rest of this talk is about...
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Distributed system models that are concurrent, scale well and manage state well
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Managing State In A Distributed System Model 1:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              What we've always done
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.hiddenSystem}>
-            <Heading size={1} fit caps textColor="primary">
-              You had a system, you just didn't know it
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Constraint #1:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              HTTP as a "stateless" protocol
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Constraint #2:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Your server code is stateless
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Primary State Manager:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              The database
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Secondary State Manager:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Session / Cookies
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.concurrencyOs}>
-            <Text textColor="tertiary">
-              Concurrency Solution #1:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Delegate to the operating system
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.concurrencyBackground}>
-            <Text textColor="tertiary">
-              Concurrency Solution #2:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Delegate to background jobs
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Why it works:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              You can scale your server at least
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Scalability bottle neck:             
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              The database
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Scalability bottle neck 2:             
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Realtime
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Reasons for this model:          
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Traditional programming languages?
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Managing State In A Distributed System Model 2:
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              The Erlang VM &amp; OTP
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Meanwhile...
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              back in the 80's...
-            </Heading>
-            <Image src={images.topgun.replace("/", "")} width="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Ericsson and the telephone switch problem
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Erlang Concurrency Part 1:            
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Actor Pattern
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              An application is composed of several actors
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Actors are seperate from each other, can communicate through messages
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Message passing is asychronous, but messages arrive in the order they're sent
-            </Heading>
-          </Slide>     
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Actor Pattern
-            </Heading>
-            <Image src={images.vogueing.replace("/", "")} width="500px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              Serving OOP Realness since 1973
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Erlang Concurrency Solution #2:            
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              A VM that replicates preemptive scheduling from an Operating System
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              In Erlang, actors = processes
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Digression:           
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Preemptive vs coorporative scheduling
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.noOsConcurrency}>
-            <Text textColor="tertiary">
-              Why not delegate to the OS?          
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              OS processes = slow to create, lots of memory
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Image src={images.popquiz.replace("/", "")} width="500px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              What programming language essentially implements a cooperative scheduling model inside the language?
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Preemptive Scheduling Bonus # 2:
-            </Heading>
-            <Image src={images.win31.replace("/", "")} width="500px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              Fault tolerance
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              State Management In Erlang:           
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              The OTP
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Erlang is functional, which makes state immutable
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Processes have internal state
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.stateNeedsMoreWork}>
-            <Heading size={4} caps textColor="primary">
-              But it needs a bit more work...
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              OTP:         
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              A standard library on steroids that makes handling distributed state way easier!
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Image src={images.carnegieHall.replace("/", "")} height="500px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              OTP is based on distributed system abstractions developed over 20 years of experience
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <BlockQuote>
-              <Quote>"Well supply the abstractions, you supply the implementation!"</Quote>
-              <Cite>- future Erlang/OTP marketing campaign</Cite>
-            </BlockQuote>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              What are the abstractions?
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Behaviors:         
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Abstractions for writing processes that handle state       
-            </Heading>   
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Most common behavior:    
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              GenServer is process that maintains a permaneant state over time     
-            </Heading>    
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Two ways to talk to a Genserver
-            </Text>
-            <List textColor="primary">
-              <ListItem>Send it a message expecting a reply (synchronous) - "CALL"</ListItem>
-              <ListItem>Send asdfads mesage not expecting a reply (asynchronous) - "CAST"</ListItem>
-            </List>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Two Functions To Implement A GenServer
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} textColor="primary">
-              handle_call
-            </Heading>
-            <Layout>
-              <Fill>
-                <Text textColor="tertiary">
-                  Parameters:
-                </Text>
-                <List ordered textColor="primary">
-                  <ListItem>
-                    Message
-                  </ListItem>
-                  <ListItem>
-                    Id of sender process
-                  </ListItem>
-                  <ListItem>
-                    Current State of GenServer
-                  </ListItem>
-                </List>
-              </Fill>
-              <Fill>
-                <Text textColor="tertiary">
-                  Returns:
-                </Text>
-                <List ordered textColor="primary">
-                  <ListItem>
-                    Type Of Reply
-                  </ListItem>
-                  <ListItem>
-                    Reply Data
-                  </ListItem>
-                  <ListItem>
-                    New State of GenServer
-                  </ListItem>
-                </List>
-              </Fill>
-            </Layout>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              A GenServer in elixir:
-            </Text>
-            <CodePane lang="elixir" source={genServerServer} textSize="0.4em" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              A GenServer in Elixir (part 2):
-            </Text>
-            <CodePane lang="elixir" source={genServerClient} textSize="0.4em" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Elixir offers two even simpler versions GenServers
-            </Text>
-            <List textColor="primary">
-              <ListItem>Task - I just wanna do some background processing</ListItem>
-              <ListItem>Agent - I just wanna hold state over time</ListItem>
-            </List>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              OTP has other basic behaviors...
-            </Text>
-            <List textColor="primary">
-              <ListItem>
-                gen_fsm - For implementing finite-state machines (Old)
-              </ListItem>
-              <ListItem>
-                gen_event - For implementing event handling functionality hold state over time
-              </ListItem>
-            </List>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Image src={images.onemorething.replace("/", "")} width="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Supervisor:         
-            </Text>
-            <Heading size={1} fit caps textColor="primary">
-              Special behavior to manage other behaviors     
-            </Heading>   
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Supervisors have:
-            </Text>
-            <List textColor="primary">
-              <ListItem>A list of child behaviors (i.e. GenServers, etc)</ListItem>
-              <ListItem>Strategies for how to keep the children running (i.e. handling failure)</ListItem>
-            </List>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Supervisors can have children that are themselves supervisors for other behaviors
-            </Heading>    
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Supervision Tree     
-            </Heading>
-            <Image src={images.suptree.replace("/", "")} width="500px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Supervisor example
-            </Text>
-            <CodePane lang="elixir" source={supervisor} textSize="0.4em" />
-          </Slide>  
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              But that's not all...
-            </Heading>    
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Other stuff in OTP
-            </Text>
-            <List textColor="primary">
-              <ListItem>Real-time distributed databases</ListItem>
-              <ListItem>Static code analyis (Dializer)</ListItem>
-              <ListItem>Tools to communicate between servers seamlessly</ListItem>
-              <ListItem>Tools to deploy new code without across multiple computers without taking the system down</ListItem>
-              <ListItem>GUI tools to monitor all this</ListItem>
-            </List>
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              OMG OMG OMG!
-            </Heading>    
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              And now back to our original question...
-            </Heading>    
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Layout>
-              <Fit>
-                <Image src={images.notYourFathersOldsmobile.replace("/", "")} height="500px" margin="40px auto 0px" />
-              </Fit>
-              <Fill>
-                <BlockQuote>
-                  <Quote>"It's not your fathers Erlang"</Quote>
-                  <Cite>- future Elixir marketing campaign</Cite>
-                </BlockQuote>
-              </Fill>
-            </Layout>
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              What about Phoenix?
-            </Heading>    
-          </Slide>   
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Phoenix:      
-            </Heading>  
-            <Text textColor="tertiary">
-              An Elixir Web framework That Implements Standard Patterns Of Distributed Web Applications
-            </Text>  
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Layout>
-              <Fit>
-                <Image src={images.mattdamon.replace("/", "")} height="500px" margin="40px auto 0px" />
-              </Fit>
-              <Fill>
-                <BlockQuote>
-                  <Quote>"New language, same web you love"</Quote>
-                  <Cite>- future Phoenix marketing slogan</Cite>
-                </BlockQuote>
-              </Fill>
-            </Layout>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              It's about to get complicated...   
-            </Heading>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Layout>
-              <Fit>
-                <Image src={images.carrie.replace("/", "")} height="500px" margin="40px auto 0px" />
-              </Fit>
-              <Fill>
-                <Heading size={4} caps textColor="primary">
-                  You have another toolset as well with immense powers... 
-                </Heading>
-                <Appear>
-                  <Text textColor="tertiary">
-                    Be afraid, very afraid
-                  </Text>
-                </Appear>
-              </Fill>
-            </Layout>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              What's better than one monster truck?
-            </Heading>
-            <Image src={images.monstertrucks.replace("/", "")} width="600px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              And this is where we enter uncharted territory...
-            </Heading>
-            <Image src={images.starTrek.replace("/", "")} width="600px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              The Big Question:         
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              How do you mix a standard web distributed system with the Erlang VM / OTP distributed system?
-            </Heading>   
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Text textColor="tertiary">
-              Answer 1:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              You're doing it already
-            </Heading> 
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Text textColor="tertiary">
-              Answer 2:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              To do the stuff you normally do, only easier
-            </Heading> 
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              An Elixir Package You Should Never See:
-            </Heading>
-            <Image src={images.sidekiqPro.replace("/", "")} width="600px" margin="40px auto 0px" />
-          </Slide>          
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Text textColor="tertiary">
-              Answer 3:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              I have no freakin clue... but I have some ideas
-            </Heading> 
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Text textColor="tertiary">
-              Possible Rule 1:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              If it's something real-time, don't use the database
-            </Heading> 
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Werewolf Game:
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              Mixing PostGres and OTP
-            </Heading>             
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Werewolf Gameroom Database Model
-            </Text>
-            <CodePane lang="elixir" source={werewolfGameRoom} textSize="0.4em" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Werewolf Game GenServer
-            </Text>
-            <CodePane lang="elixir" source={werewolfGameServer} textSize="0.4em" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              Werewolf Game GenServer Client
-            </Text>
-            <CodePane lang="elixir" source={werewolfGame} textSize="0.4em" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Heading size={1} fit caps textColor="primary">
-              Possible Rule #2:
-            </Heading>
-            <Text textColor="tertiary">
-              If it's stored distributed and has to scalre, don't use a relational database, use OTP (or Riak!)
-            </Text> 
-            <Appear>
-              <Text textColor="tertiary">
-                ... and don't bolt on MongoDB ...
               </Text>
-            </Appear>
-          </Slide>        
-          <Slide transition={["slide"]} bgColor="black" notes={notes.onlyAlternative}>
-            <Heading size={1} fit caps textColor="primary">
-              Possible Rule #3:
-            </Heading>
-            <Text textColor="tertiary">
-              If you can't do it with web tools, obviously use OTP
-            </Text> 
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Heading size={1} fit caps textColor="primary">
-              Cardinal Rule #1:
-            </Heading>
-            <Text textColor="tertiary">
-              If you only know traditional web models...
-            </Text> 
-            <Appear>
-              <Text textColor="tertiary">
-                ...or only OTP...
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">
+                  Disposable Isolated Servers
+                </ListItem>
+                <ListItem textSize="3.82rem">Restarted Frequently</ListItem>
+                <ListItem textSize="3.82rem">Possibly Containerized</ListItem>
+              </List>
+            </Fill>
+            <Fill>
+              <Text textSize="3.82rem" textColor="tertiary">
+                OTP
               </Text>
-            </Appear>
-            <Appear>
-              <Text textColor="tertiary">
-                ...learn the other!
-              </Text>
-            </Appear>
-          </Slide> 
-          <Slide transition={["slide"]} bgColor="black" notes={notes.doingItAlready}>
-            <Heading size={1} fit caps textColor="primary">
-              Cardinal Rule #2:
-            </Heading>
-            <Text textColor="tertiary">
-              Once you know both...
-            </Text> 
-            <Appear>
-              <Text textColor="tertiary">
-                ...Be creative...
-              </Text>
-            </Appear>
-            <Appear>
-              <Text textColor="tertiary">
-                ...Discover new rules!
-              </Text>
-            </Appear>
-          </Slide>    
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={1} fit caps textColor="primary">
-              Origin Of This Talk
-            </Heading>
-            <Image src={images.ali.replace("/", "")} width="600px" margin="40px auto 0px" />
-            <Text textColor="tertiary">
-              A bit of overconfidence
-            </Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Text textColor="tertiary">
-              This question is huge... 
-            </Text>
-            <Heading size={4} caps textColor="primary">
-              We're all gonna figure it out together!
-            </Heading>      
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              Good luck
-            </Heading>
-            <Image src={images.hansolo.replace("/", "")} width="600px" margin="40px auto 0px" />
-          </Slide>
-          <Slide transition={["slide"]} bgColor="black" notes="">
-            <Heading size={4} caps textColor="primary">
-              http://elixir-otp-phoenix-presentation.techgirlwonder.com
-            </Heading>
-          </Slide>
-        </Deck>     
-      </Spectacle>
+              <List ordered textColor="primary">
+                <ListItem textSize="3.82rem">
+                  Durable Connected Servers
+                </ListItem>
+                <ListItem textSize="3.82rem">
+                  Direct Access To Hardware
+                </ListItem>
+                <ListItem textSize="3.82rem">Specific Release Process</ListItem>
+              </List>
+            </Fill>
+          </Layout>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            An Embarassment of Riches?
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">Two Awesomes Are Great!</ListItem>
+            <ListItem textSize="3.82rem">But it's a lot to learn....</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={4} caps textColor={darkTertiary}>
+            Act 5:
+          </Heading>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            3 Solutions...
+          </Heading>
+          <Image
+            src={images.megancheer.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>Don't stop believing...</Quote>
+          </BlockQuote>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Three Approaches
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              KISS: Web + OTP Under The Hood
+            </ListItem>
+            <ListItem textSize="3.82rem">All In On OTP</ListItem>
+            <ListItem textSize="3.82rem">Exciting New Hybrids</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            OTP is complicated! I just want to dip my toes!
+          </Heading>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.doingItAlready}
+        >
+          <Text textSize="3.82rem" textColor="tertiary">
+            Pssst...
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            You're doing it already
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            How Phoenix Uses OTP
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">Process Per Web Request</ListItem>
+            <ListItem textSize="3.82rem">Channels + Presence</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            PSA: Don't Discount This Approach!
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Use Cases
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">Port Projects</ListItem>
+            <ListItem textSize="3.82rem">Convince Adoption Skeptics</ListItem>
+            <ListItem textSize="3.82rem">Hard Deployment Env</ListItem>
+            <ListItem textSize="3.82rem">
+              Real Time Needs Fit In Channels
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.doingItAlready}
+        >
+          <Text textSize="3.82rem" textColor="tertiary">
+            Ideal Team
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Small To Mid Size,
+            <br /> Minimal OTP Experience, <br />
+            Converting Rails App,
+            <br />
+            Get Speed Win And FP
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            I Write Erlang, I Just Want It On The Web!
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Phoenix (or Plug/Cowboy)
+            <br /> as Thin Web Wrapper
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Use Cases
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              Large Mostly Real Time Highly Distributed Systems
+            </ListItem>
+            <ListItem textSize="3.82rem">Long Term Uptime</ListItem>
+            <ListItem textSize="3.82rem">
+              Have Total Control Over Deployment
+            </ListItem>
+            <ListItem textSize="3.82rem">
+              Real Time Needs Fit In Channels
+            </ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.doingItAlready}
+        >
+          <Text textSize="3.82rem" textColor="tertiary">
+            Ideal Team
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Veteran Erlang/OTP Devs,
+            <br />
+            Game Devs,
+            <br /> Independent Consultants Maintaining Hardware
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            I want to explore uncharted territory!
+          </Heading>
+          <Image
+            src={images.starTrek.replace("/", "")}
+            width="600px"
+            margin="40px auto 0px"
+          />
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Question:
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Can OTP Run On Standard Web Infra?
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Distributed Supervisors + Restarting Whole Nodes
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} caps textColor="primary">
+            Talk Inception
+          </Heading>
+          <Layout>
+            <Fit>
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/nLApFANtkHs"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                style={{ margin: "40px 40px 0px 0px" }}
+              />
+            </Fit>
+            <Fit>
+              <Image
+                src={images.inception.replace("/", "")}
+                height="315px"
+                margin="40px 0px 0px 0px"
+              />
+            </Fit>
+          </Layout>
+          <Text textSize="3.82rem" caps textColor="tertiary">
+            ElixirConf 2018 - Docker and OTP Friends or Foes <br />- Daniel
+            Azuma
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Writing New Erlang Clusters
+          </Heading>
+          <Text textSize="3.82rem" caps textColor="tertiary">
+            <Link href="https://github.com/bitwalker/libcluster">
+              https://github.com/bitwalker/libcluster
+            </Link>
+          </Text>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Is All State Permaneant?
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Catching With OTP?
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Heading size={1} fit caps textColor="primary">
+            Database as Async Backup?
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} inverted notes="">
+          <Text textSize="3.82rem" textColor="tertiary">
+            Use Cases
+          </Text>
+          <List textColor="primary">
+            <ListItem textSize="3.82rem">
+              Apps With Mostly Web Patterns But Important Real Time Needs
+            </ListItem>
+            <ListItem textSize="3.82rem">Offer Compelling Advantages</ListItem>
+            <ListItem textSize="3.82rem">Deploy On Web Infra</ListItem>
+          </List>
+        </BlankSlide>
+        <BlankSlide
+          transition={["slide"]}
+          inverted
+          notes={notes.doingItAlready}
+        >
+          <Text textSize="3.82rem" textColor="tertiary">
+            Ideal Team
+          </Text>
+          <Heading size={1} caps textColor="primary">
+            Enterprise,
+            <br />
+            Significant Budget,
+            <br />
+            Ready For Long Term Investment
+          </Heading>
+        </BlankSlide>
+        <BlankSlide transition={["slide"]} notes={notes.vs}>
+          <Heading size={1} caps lineHeight={1} textColor="secondary">
+            Fin.
+          </Heading>
+          <Image
+            src={images.kiss.replace("/", "")}
+            height="500px"
+            margin="40px 00px 40px 0px"
+          />
+          <BlockQuote>
+            <Quote textColor={darkTertiary}>
+              It goes on and on and on and on
+            </Quote>
+          </BlockQuote>
+          <Text textSize="3.82rem" textColor={darkTertiary}>
+            <Link href="http://gigcityelixir.techgirlwonder.com">
+              http://gigcityelixir.techgirlwonder.com
+            </Link>
+          </Text>
+        </BlankSlide>
+      </Deck>
     );
   }
 }
